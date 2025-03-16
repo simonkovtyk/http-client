@@ -1,3 +1,4 @@
-mod http;
+mod utils;
+mod enums;
 
-pub use http;
+pub mod http;
