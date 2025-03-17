@@ -1,6 +1,9 @@
+use crate::constants;
+use crate::enums;
+
 use std;
 
-pub fn parse_params<'a>(params: &std::collections::HashMap<&str, &str>) -> String {
+pub fn parse_params(params: &std::collections::HashMap<&str, &str>) -> String {
   let params_iter = params.into_iter();
 
   if params_iter.clone().count() == 0 {
@@ -18,7 +21,19 @@ pub fn parse_params<'a>(params: &std::collections::HashMap<&str, &str>) -> Strin
   return params_string;
 }
 
-pub fn parse_headers<'a>(headers: &std::collections::HashMap<&str, &str>) -> String {
+pub fn get_method_str(method: &'static enums::Methods) -> &'static str {
+  match method {
+    enums::Methods::GET => return "GET",
+    enums::Methods::POST => return "POST",
+    enums::Methods::PUT => return "PUT",
+    enums::Methods::DELETE => return "DELETE",
+    enums::Methods::PATCH => return "PATCH",
+    enums::Methods::HEAD => return "HEAD",
+    enums::Methods::OPTIONS => return "OPTIONS"
+  }
+}
+
+pub fn parse_headers(headers: &std::collections::HashMap<&str, &str>) -> String {
   let headers_iter = headers.into_iter();
 
   if headers_iter.clone().count() == 0 {
@@ -29,7 +44,7 @@ pub fn parse_headers<'a>(headers: &std::collections::HashMap<&str, &str>) -> Str
 
   for (key, value) in headers_iter {
     headers_string.push_str(
-      &format!("{}: {}\n", key, value)
+      &format!("{}: {}{}", key, value, constants::LINEBREAK)
     );
   }
 
@@ -40,3 +55,12 @@ pub fn has_ssl_in_url(url: &str) -> bool {
   return url.starts_with("https");
 }
 
+pub fn serialize_json<T: serde::ser::Serialize>(data: &T) -> String {
+  return serde_json::to_string(data).unwrap();
+}
+
+pub fn get_relative_url(url: &str) -> String {
+  let byte_index_of_first_slash: usize = url.find("/").unwrap();
+
+  return url.to_string()[byte_index_of_first_slash + 1..].to_string();
+}

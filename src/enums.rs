@@ -1,7 +1,15 @@
 pub enum ContentType {
-  XWWWFORMURLENCODED,
+  FORMURLENCODED,
   JSON,
-  TEXT,
-  FORMDATA
+  TEXT
 }
 
+pub enum Methods {
+  GET,
+  POST,
+  PUT,
+  DELETE,
+  PATCH,
+  HEAD,
+  OPTIONS
+}
